@@ -1,20 +1,13 @@
+import 'package:app_contacts/src/screens/HomeScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'components/AddContact.dart';
 
-class AppWidget extends StatefulWidget {
-  @override
-  State<AppWidget> createState() => _AppWidgetState();
-}
+import 'components/ChangeClickSearch.dart';
 
-class _AppWidgetState extends State<AppWidget> {
-  String title = 'Contacts';
-
-  bool clickSearch = true;
-
-  _changeClickSearch() {
-    setState(() {
-      clickSearch = !clickSearch;
-    });
-  }
+class AppWidget extends StatelessWidget {
+  static const HOME_SCREEN = '/';
+  static const ADD_SCREEN = '/add_screen';
 
   @override
   Widget build(BuildContext context) {
@@ -23,47 +16,19 @@ class _AppWidgetState extends State<AppWidget> {
       theme: ThemeData(
         brightness: Brightness.light,
       ),
-      home: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(70.0),
-          child: AppBar(
-            backgroundColor: Colors.black,
-            elevation: 20,
-            title: clickSearch
-                ? Text(title)
-                : Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                  child: TextField(
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        fillColor: Colors.white10,
-                        filled: true,
-                        prefixIcon: IconButton(
-                          color: Colors.white,
-                          onPressed: _changeClickSearch,
-                          icon: Icon(Icons.close),
-                        ),
-                        hintText: 'Buscar contato',
-                        hintStyle: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                ),
-            actions: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10),
-                child: IconButton(
-                  onPressed: _changeClickSearch,
-                  icon:clickSearch? Icon(Icons.search) : Icon(Icons.search, color: Colors.black,),
-                ),
-              )
-            ],
-          ),
-        ),
-        body: const Text(''),
-      ),
+      initialRoute: HOME_SCREEN,
+      routes: {
+        HOME_SCREEN: (context) => HomeScreen(),
+        ADD_SCREEN: (context) => AddContact(),
+      },
     );
+    // MultiProvider(
+    //   providers: [
+    //   ChangeNotifierProvider(
+    //   create: (_) => ChangeClick(),
+    // ),
+    // ],
+    // child:
+    // );
   }
 }
