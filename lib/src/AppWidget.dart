@@ -1,9 +1,7 @@
 import 'package:app_contacts/src/screens/HomeScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'components/AddContact.dart';
 
-import 'components/ChangeClickSearch.dart';
 
 class AppWidget extends StatelessWidget {
   static const HOME_SCREEN = '/';
@@ -22,13 +20,6 @@ class AppWidget extends StatelessWidget {
         ADD_SCREEN: (context) => AddContact(),
       },
     );
-    // MultiProvider(
-    //   providers: [
-    //   ChangeNotifierProvider(
-    //   create: (_) => ChangeClick(),
-    // ),
-    // ],
-    // child:
-    // );
+
   }
 }

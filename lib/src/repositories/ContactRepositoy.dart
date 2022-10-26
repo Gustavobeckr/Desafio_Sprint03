@@ -2,10 +2,18 @@ import 'package:app_contacts/src/models/ContactModel.dart';
 import 'package:dio/dio.dart';
 
 class ContactRepository{
-  final dio = Dio();
-  final url = 'https://jsonplaceholder.typicode.com/todos';
+  late final Dio dio;
+  final url = 'https://mocki.io/v1/43b66c59-2ed5-4e95-bd61-4b8b21b2bb01';
+
+  ContactRepository([Dio? client]){
+    if(client == null){
+      this.dio = Dio();
+    } else {
+      this.dio = client;
+    }
+  }
   
-  Future<List<ContactModel>> fetchCotacts()async{
+  Future<List<ContactModel>> fetchContacts()async{
     final response =  await dio.get(url);
     final list = response.data as List;
 

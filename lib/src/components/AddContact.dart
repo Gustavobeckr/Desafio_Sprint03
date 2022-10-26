@@ -3,10 +3,8 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AddContact extends StatelessWidget {
-  const AddContact({Key? key}) : super(key: key);
-
-  @override
+class AddContact extends StatelessWidget{
+  
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
     final TextEditingController _nameController = TextEditingController();
@@ -97,7 +95,7 @@ class AddContact extends StatelessWidget {
       actions: [
         TextButton(
             onPressed: () {
-                Navigator.of(context).popAndPushNamed(AppWidget.HOME_SCREEN);
+              Navigator.of(context).popAndPushNamed(AppWidget.HOME_SCREEN);
             },
             child: Text(
               "Cancel",
@@ -105,14 +103,17 @@ class AddContact extends StatelessWidget {
             )),
         TextButton(
             onPressed: () {
+              
               if (formKey.currentState!.validate()) {
                 Navigator.of(context).popAndPushNamed(AppWidget.HOME_SCREEN);
               }
+         
+              
             },
             child: Text(
               "Confirm",
               style: TextStyle(color: Colors.black, fontSize: 20),
-            ))
+            )),
       ],
     );
   }
