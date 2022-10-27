@@ -1,9 +1,11 @@
-import 'package:app_contacts/src/models/contact_model.dart';
+
 import 'package:dio/dio.dart';
+
+import '../models/text_model.dart';
 
 class ContactRepository{
   late final Dio dio;
-  final url = 'https://mocki.io/v1/43b66c59-2ed5-4e95-bd61-4b8b21b2bb01';
+  final url = 'https://type.fit/api/quotes';
 
   ContactRepository([Dio? client]){
     if(client == null){
@@ -13,16 +15,15 @@ class ContactRepository{
     }
   }
   
-  Future<List<ContactModel>> fetchContacts()async{
+  Future<List<TextModel>> fetchContacts()async{
     final response =  await dio.get(url);
     final list = response.data as List;
 
-    List<ContactModel> contacts = [];
+    List<TextModel> listCards = [];
     for(var json in list){
-       final contact = ContactModel.fromJson(json);
-       contacts.add(contact);
+       final card = TextModel.fromJson(json);
+       listCards.add(card);
     }
-    return contacts;
+    return listCards;
   }
-  
 }

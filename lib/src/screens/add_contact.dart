@@ -1,10 +1,8 @@
 import 'package:app_contacts/src/app_widget.dart';
-import 'package:app_contacts/src/models/contact_model.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../database/dao/contact_dao.dart';
 
 class AddContact extends StatefulWidget {
   @override
@@ -16,8 +14,6 @@ class _AddContactState extends State<AddContact> {
     final formKey = GlobalKey<FormState>();
     final TextEditingController _nameController = TextEditingController();
     final TextEditingController _numberController = TextEditingController();
-
-    final ContactDao _dao = ContactDao();
 
     return AlertDialog(
       actionsPadding: EdgeInsets.fromLTRB(0, 0, 20, 15),
@@ -112,14 +108,8 @@ class _AddContactState extends State<AddContact> {
             )),
         TextButton(
             onPressed: () {
-              final String name = _nameController.text;
-              final String phoneNumber = _numberController.text;
-              final ContactModel newContact =
-                  ContactModel(name: name, phoneNumber: phoneNumber, id: 0);
-              _dao.save(newContact).then((id) => {
                     if (formKey.currentState!.validate())
-                      {Navigator.pop(context, newContact)}
-                  });
+                      {Navigator.pop(context);}
             },
             child: Text(
               "Confirm",

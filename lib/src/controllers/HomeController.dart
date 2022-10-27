@@ -1,10 +1,10 @@
+import 'package:app_contacts/src/models/text_model.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../models/contact_model.dart';
 import '../repositories/contact_repositoy.dart';
 
 class HomeController {
-  List<ContactModel> contacts = [];
+  List<TextModel> listCards = [];
   late final ContactRepository repository;
   final state = ValueNotifier<HomeState>(HomeState.start);
 
@@ -19,7 +19,7 @@ class HomeController {
   Future start() async {
     state.value = HomeState.loadind;
     try {
-      contacts = await repository.fetchContacts();
+      listCards = await repository.fetchContacts();
       state.value = HomeState.success;
     } catch (e) {
       state.value = HomeState.error;

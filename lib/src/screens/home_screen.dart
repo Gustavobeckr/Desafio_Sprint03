@@ -1,7 +1,5 @@
-import 'package:app_contacts/src/database/dao/contact_dao.dart';
-import 'package:app_contacts/src/models/contact_model.dart';
-import 'package:app_contacts/src/screens/add_contact.dart';
 import 'package:flutter/material.dart';
+import '../controllers/HomeController.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -11,6 +9,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String title = 'Contacts';
 
+  final controller = HomeController();
+
   bool clickSearch = true;
 
   _changeClickSearch() {
@@ -19,7 +19,50 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  final ContactDao _dao = ContactDao();
+  _success() {
+    return CardText();
+  }
+
+  _error() {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          controller.start();
+        },
+        child: Text("Tentar novamente"),
+      ),
+    );
+  }
+
+  _loading() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  _start() {
+    return Container();
+  }
+
+  stateManagement(HomeState state) {
+    switch (state) {
+      case HomeState.start:
+        return _start();
+      case HomeState.loadind:
+        return _loading();
+      case HomeState.error:
+        return _error();
+      case HomeState.success:
+        return _success();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller.start();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,54 +111,27 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AddContact();
-              });
-        },
-        backgroundColor: Colors.black,
-        child: Icon(
-          Icons.add,
-          size: 40,
-          color: Colors.white,
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     showDialog(
+      //         context: context,
+      //         builder: (context) {
+      //           return AddContact();
+      //         });
+      //   },
+      //   backgroundColor: Colors.black,
+      //   child: Icon(
+      //     Icons.add,
+      //     size: 40,
+      //     color: Colors.white,
+      //   ),
+      // ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-        child: FutureBuilder<List<ContactModel>>(
-          initialData: [],
-          future: _dao.findAll(),
-          builder: (context, snapshot) {
-            final List<ContactModel>? contacts = snapshot.data;
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-                break;
-              case ConnectionState.waiting:
-                return Center(
-                  child: Column(
-                    children: [
-                      CircularProgressIndicator(),
-                      Text(
-                        'Loading',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ],
-                  ),
-                );
-              case ConnectionState.active:
-                break;
-              case ConnectionState.done:
-                return ListView.builder(
-                    itemCount: contacts?.length,
-                    itemBuilder: (context, index) {
-                      final ContactModel contact = contacts![index];
-                      return CardContact();
-                    });
-            }
-            return Center(child: Text('ERROR'));
+        child: AnimatedBuilder(
+          animation: controller.state,
+          builder: (context, child) {
+            return stateManagement(controller.state.value);
           },
         ),
       ),
@@ -123,73 +139,79 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class CardContact extends StatelessWidget {
-  late final ContactModel contact;
+class CardText extends StatelessWidget {
+  final controller = HomeController();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(5, 10, 10, 0),
-      child: Container(
-        height: 70,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: Colors.white,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Stack(children: [
-                    ClipOval(
-                      child: Container(
-                        width: 60,
-                        height: 60,
-                        decoration:
-                            BoxDecoration(color: Color.fromRGBO(0, 0, 0, 0.1)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(4, 2, 0, 0),
-                      child: Icon(
-                        Icons.person,
-                        size: 50,
-                      ),
-                    ),
-                  ]),
-                  SizedBox(width: 40),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 5),
-                      Text(
-                        contact.name.toString(),
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        contact.phoneNumber.toString(),
-                        style: TextStyle(fontSize: 18),
-                      )
-                    ],
-                  ),
-                ],
+    return ListView.builder(
+        itemCount: controller.listCards.length,
+        itemBuilder: (context, index) {
+          var card = controller.listCards[index];
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(5, 10, 10, 0),
+            child: Container(
+              height: 70,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.white,
               ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.local_phone,
-                  size: 40,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Stack(children: [
+                          ClipOval(
+                            child: Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                  color: Color.fromRGBO(0, 0, 0, 0.1)),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(4, 2, 0, 0),
+                            child: Icon(
+                              Icons.person,
+                              size: 50,
+                            ),
+                          ),
+                        ]),
+                        SizedBox(width: 40),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 5),
+                            Text(
+                              card.author.toString(),
+                              style: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              card.text.toString(),
+                              style: TextStyle(fontSize: 18),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.local_phone,
+                        size: 40,
+                      ),
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+              ),
+            ),
+          );
+        });
   }
 }
