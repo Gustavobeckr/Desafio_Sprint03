@@ -1,6 +1,6 @@
-import 'package:app_contacts/src/screens/HomeScreen.dart';
+import 'package:app_contacts/src/screens/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'components/AddContact.dart';
+import 'screens/add_contact.dart';
 
 
 class AppWidget extends StatelessWidget {

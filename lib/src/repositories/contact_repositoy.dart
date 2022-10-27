@@ -1,4 +1,4 @@
-import 'package:app_contacts/src/models/ContactModel.dart';
+import 'package:app_contacts/src/models/contact_model.dart';
 import 'package:dio/dio.dart';
 
 class ContactRepository{

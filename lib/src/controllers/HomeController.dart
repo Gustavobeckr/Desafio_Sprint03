@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
-import '../models/ContactModel.dart';
-import '../repositories/ContactRepositoy.dart';
+import '../models/contact_model.dart';
+import '../repositories/contact_repositoy.dart';
 
 class HomeController {
   List<ContactModel> contacts = [];
