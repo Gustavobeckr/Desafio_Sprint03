@@ -1,5 +1,7 @@
+import 'package:app_contacts/src/components/card_text.dart';
 import 'package:flutter/material.dart';
 import '../controllers/HomeController.dart';
+import 'add_contact.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -7,7 +9,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String title = 'Contacts';
+  String title = 'Texts';
 
   final controller = HomeController();
 
@@ -81,15 +83,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(20)),
                       fillColor: Colors.white10,
                       filled: true,
-                      prefixIcon: IconButton(
-                        color: Colors.white,
-                        onPressed: _changeClickSearch,
-                        icon: Icon(Icons.close),
-                      ),
-                      hintText: 'Search contact',
+                      hintText: 'Search text',
                       hintStyle: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -99,119 +97,89 @@ class _HomeScreenState extends State<HomeScreen> {
               padding:
                   const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10),
               child: IconButton(
-                onPressed: _changeClickSearch,
-                icon: clickSearch
-                    ? Icon(Icons.search)
-                    : Icon(
-                        Icons.search,
-                        color: Colors.black,
-                      ),
-              ),
+                  onPressed: _changeClickSearch,
+                  icon: clickSearch ? Icon(Icons.search) : Icon(Icons.close)),
             )
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     showDialog(
-      //         context: context,
-      //         builder: (context) {
-      //           return AddContact();
-      //         });
-      //   },
-      //   backgroundColor: Colors.black,
-      //   child: Icon(
-      //     Icons.add,
-      //     size: 40,
-      //     color: Colors.white,
-      //   ),
-      // ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-        child: AnimatedBuilder(
-          animation: controller.state,
-          builder: (context, child) {
-            return stateManagement(controller.state.value);
-          },
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AddContact();
+              });
+        },
+        backgroundColor: Colors.black,
+        child: Icon(
+          Icons.add,
+          size: 40,
+          color: Colors.white,
         ),
       ),
-    );
-  }
-}
-
-class CardText extends StatelessWidget {
-  final controller = HomeController();
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: controller.listCards.length,
-        itemBuilder: (context, index) {
-          var card = controller.listCards[index];
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(5, 10, 10, 0),
-            child: Container(
-              height: 70,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.white,
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Stack(children: [
-                          ClipOval(
-                            child: Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                  color: Color.fromRGBO(0, 0, 0, 0.1)),
-                            ),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+        child: ListView.builder(
+            itemCount: controller.listCards.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(5, 10, 10, 0),
+                child: Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: const Color(0xFF000000),
+                        width: 1.0,
+                        style: BorderStyle.solid),
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 0.0, horizontal: 5),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(width: 20),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    controller.listCards[index].author
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    controller.listCards[index].text.toString(),
+                                    style: TextStyle(fontSize: 18),
+                                  )
+                                ],
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(4, 2, 0, 0),
-                            child: Icon(
-                              Icons.person,
-                              size: 50,
-                            ),
-                          ),
-                        ]),
-                        SizedBox(width: 40),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 5),
-                            Text(
-                              card.author.toString(),
-                              style: TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              card.text.toString(),
-                              style: TextStyle(fontSize: 18),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.local_phone,
-                        size: 40,
+                        ],
                       ),
-                    )
-                  ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          );
-        });
+              );
+            }),
+        // AnimatedBuilder(
+        //   animation: controller.state,
+        //   builder: (context, child) {
+        //     return stateManagement(HomeState.success);
+        //   },
+        // ),
+      ),
+    );
   }
 }
