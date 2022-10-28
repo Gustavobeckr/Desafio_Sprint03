@@ -102,7 +102,7 @@ class _AddContactState extends State<AddContact> {
           actions: [
             TextButton(
                 onPressed: () {
-                  Navigator.of(context).popAndPushNamed(AppWidget.HOME_SCREEN);
+                  Navigator.of(context).pop(AppWidget.HOME_SCREEN);
                 },
                 child: Text(
                   "Cancel",

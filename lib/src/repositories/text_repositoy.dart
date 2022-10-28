@@ -19,11 +19,5 @@ class ContactRepository{
         list = value;
       });
       return list;
-      // List<TextModel> listCards = [];
-      // for (var json in list) {
-      //   final card = TextModel.fromJson(json);
-      //   listCards.add(card);
-      // }
-      // return listCards;
   }
 }

@@ -1,4 +1,3 @@
-import 'package:app_contacts/src/components/card_text.dart';
 import 'package:flutter/material.dart';
 import '../controllers/HomeController.dart';
 import 'add_contact.dart';
@@ -15,14 +14,58 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool clickSearch = true;
 
-  _changeClickSearch() {
-    setState(() {
-      clickSearch = !clickSearch;
-    });
-  }
-
   _success() {
-    return CardText();
+    return ListView.builder(
+        itemCount: controller.listCards.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(5, 10, 10, 0),
+            child: Container(
+              height: 100,
+              decoration: BoxDecoration(
+                border: Border.all(
+                    color: const Color(0xFF000000),
+                    width: 1.0,
+                    style: BorderStyle.solid),
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.white,
+              ),
+              child: Padding(
+                padding:
+                const EdgeInsets.symmetric(vertical: 0.0, horizontal: 5),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(width: 20),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                controller.listCards[index].author.toString(),
+                                style: TextStyle(
+                                    fontSize: 25, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                controller.listCards[index].text.toString(),
+                                style: TextStyle(fontSize: 18),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   _error() {
@@ -38,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _loading() {
     return Center(
-      child: CircularProgressIndicator(),
+      child: CircularProgressIndicator(color: Colors.black,),
     );
   }
 
@@ -97,88 +140,39 @@ class _HomeScreenState extends State<HomeScreen> {
               padding:
                   const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10),
               child: IconButton(
-                  onPressed: _changeClickSearch,
+                  onPressed: () {
+                    setState(() {
+                      clickSearch = !clickSearch;
+                    });
+                  },
                   icon: clickSearch ? Icon(Icons.search) : Icon(Icons.close)),
             )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AddContact();
-              });
-        },
-        backgroundColor: Colors.black,
-        child: Icon(
-          Icons.add,
-          size: 40,
-          color: Colors.white,
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     showDialog(
+      //         context: context,
+      //         builder: (context) {
+      //           return AddContact();
+      //         });
+      //   },
+      //   backgroundColor: Colors.black,
+      //   child: Icon(
+      //     Icons.add,
+      //     size: 40,
+      //     color: Colors.white,
+      //   ),
+      // ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-        child: ListView.builder(
-            itemCount: controller.listCards.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.fromLTRB(5, 10, 10, 0),
-                child: Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: const Color(0xFF000000),
-                        width: 1.0,
-                        style: BorderStyle.solid),
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 0.0, horizontal: 5),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(width: 20),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    controller.listCards[index].author
-                                        .toString(),
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    controller.listCards[index].text.toString(),
-                                    style: TextStyle(fontSize: 18),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            }),
-        // AnimatedBuilder(
-        //   animation: controller.state,
-        //   builder: (context, child) {
-        //     return stateManagement(HomeState.success);
-        //   },
-        // ),
+        child: AnimatedBuilder(
+          animation: controller.state,
+          builder: (context, child) {
+            return stateManagement(controller.state.value);
+          },
+        ),
       ),
     );
   }

@@ -16,23 +16,4 @@ class TextModel {
     return data;
   }
 }
-// class TextModel {
-//   String? author;
-//   String? text;
-//
-//   TextModel({this.author, this.text});
-//
-//   TextModel.fromJson(Map<String, dynamic> json) {
-//     author = json['name'];
-//     text = json['phone_number'];
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['name'] = this.author;
-//     data['phone_number'] = this.text;
-//     return data;
-//   }
-// }
-
 
